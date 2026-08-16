@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DISPEČING</title>
+<title>Dispečing</title>
 
 <!-- PWA Manifest & Ikony -->
 <link rel="manifest" href="manifest.json">
@@ -229,7 +229,7 @@ a {
 
 <div class="header">
   <img src="icon.png" class="logo" alt="Logo">
-  <h1>DISPEČING</h1>
+  <h1>Dispečing</h1>
   <p>Správa služieb, pracovníkov a evidencie</p>
   <div id="datetime"></div>
   <div id="stats"></div>
@@ -440,6 +440,15 @@ function searchTiles() {
     tiles.forEach(tile => {
         tile.style.display = tile.innerText.toLowerCase().includes(filter) ? "" : "none";
     });
+}
+
+/* REGISTRÁCIA SERVICE WORKERA PRE INŠTALÁCIU PWA */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js', { scope: './' })
+      .then(reg => console.log('Service Worker úspešne zaregistrovaný!', reg))
+      .catch(err => console.error('Chyba pri registrácii Service Workera:', err));
+  });
 }
 </script>
 
