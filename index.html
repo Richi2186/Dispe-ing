@@ -10,90 +10,105 @@
 <link rel="icon" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
 
-<meta name="theme-color" content="#0f172a">
+<meta name="theme-color" content="#0b0f19">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Dispečing">
 
-<!-- Knižnica na čítanie Excel súborov -->
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<!-- XLSX Library -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
 :root {
-    --bg-dark: #0f172a;
-    --card-bg: rgba(30, 41, 59, 0.7);
-    --card-border: rgba(255, 255, 255, 0.1);
-    --text-main: #f8fafc;
+    --bg-dark: #0b0f19;
+    --card-bg: rgba(18, 24, 38, 0.75);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --text-main: #f1f5f9;
     --text-sub: #94a3b8;
-    --accent: #6366f1;
+    --accent-blue: #38bdf8;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: var(--bg-dark);
     background-image: 
-        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.15) 0px, transparent 50%);
+        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.08) 0px, transparent 50%);
     background-attachment: fixed;
     color: var(--text-main);
     user-select: none;
     -webkit-tap-highlight-color: transparent;
-    padding-bottom: 50px;
+    padding-bottom: 60px;
     min-height: 100vh;
 }
 
 /* HEADER */
 .header {
-    background: rgba(15, 23, 42, 0.8);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(11, 15, 25, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--card-border);
-    padding: 30px 20px;
+    padding: 24px 20px;
     text-align: center;
     position: sticky;
     top: 0;
     z-index: 100;
 }
 
+.header-title-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
 .header h1 {
-    margin: 10px 0 5px;
-    font-size: 32px;
+    margin: 0;
+    font-size: 28px;
     font-weight: 800;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
     background: linear-gradient(135deg, #38bdf8, #818cf8);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .header p {
-    margin: 0;
+    margin: 6px 0 0;
     color: var(--text-sub);
-    font-size: 14px;
+    font-size: 13px;
+    font-weight: 500;
 }
 
 .logo {
-    width: 55px;
-    height: auto;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
 }
 
 #datetime {
-    margin-top: 12px;
-    font-size: 14px;
+    margin-top: 14px;
+    font-size: 13px;
     font-weight: 600;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--card-border);
-    color: #38bdf8;
-    display: inline-block;
-    padding: 6px 16px;
+    color: var(--accent-blue);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
     border-radius: 20px;
 }
 
-/* STATS */
 #stats {
     text-align: center;
-    margin-top: 10px;
+    margin-top: 8px;
     font-size: 12px;
     color: var(--text-sub);
 }
@@ -106,20 +121,32 @@ body {
 }
 
 /* SEARCH */
+.search-wrapper {
+    position: relative;
+    margin: 15px 0 25px;
+}
+
+.search-wrapper i {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-sub);
+    width: 20px;
+    height: 20px;
+}
+
 #searchBox {
     width: 100%;
-    padding: 16px 20px;
+    padding: 14px 16px 14px 48px;
     border: 1px solid var(--card-border);
-    border-radius: 16px;
-    margin: 20px 0 30px;
-    font-size: 16px;
+    border-radius: 12px;
+    font-size: 15px;
     background: var(--card-bg);
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(12px);
     color: var(--text-main);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    box-sizing: border-box;
     outline: none;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 #searchBox::placeholder {
@@ -127,273 +154,285 @@ body {
 }
 
 #searchBox:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
 }
 
-/* GRID */
+/* SECTIONS & GRID */
+h2 {
+    margin: 30px 0 16px;
+    color: var(--text-main);
+    font-size: 18px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+h2 i {
+    color: var(--accent-blue);
+    width: 22px;
+    height: 22px;
+}
+
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
 }
 
 a {
     text-decoration: none;
 }
 
-/* CARD GLASSMORPHISM */
+/* CARD DESIGN */
 .card {
-    height: 130px;
-    border-radius: 20px;
+    height: 120px;
+    border-radius: 16px;
     background: var(--card-bg);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--card-border);
     color: var(--text-main);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.25s ease;
     cursor: pointer;
     text-align: center;
-    padding: 15px;
-    box-sizing: border-box;
+    padding: 16px;
     position: relative;
     overflow: hidden;
 }
 
-.card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: var(--card-accent, var(--accent));
+.card-icon-wrapper {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    transition: transform 0.2s ease;
+}
+
+.card-icon-wrapper i {
+    width: 22px;
+    height: 22px;
 }
 
 .card:hover {
-    transform: translateY(-5px) scale(1.02);
-    border-color: rgba(255, 255, 255, 0.25);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 15px var(--card-accent, var(--accent));
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
 }
 
-.icon {
-    font-size: 36px;
-    margin-bottom: 8px;
+.card:hover .card-icon-wrapper {
+    transform: scale(1.1);
 }
 
-/* ACCENT COLORS FOR CARDS */
-.navy   { --card-accent: #3b82f6; }
-.indigo { --card-accent: #6366f1; }
-.cyan   { --card-accent: #06b6d4; }
-.teal   { --card-accent: #14b8a6; }
-.lime   { --card-accent: #84cc16; }
-.green  { --card-accent: #22c55e; }
-.yellow { --card-accent: #eab308; }
-.coral  { --card-accent: #f97316; }
-.pink   { --card-accent: #ec4899; }
-.purple { --card-accent: #a855f7; }
-.grey   { --card-accent: #64748b; }
-
-h2 {
-    margin-top: 35px;
-    margin-bottom: 15px;
-    color: var(--text-main);
-    font-size: 20px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
+/* FAREBNÉ ŠTÝLE PRE IKONY A AKCENTY */
+.c-blue .card-icon-wrapper   { background: rgba(56, 189, 248, 0.12); color: #38bdf8; }
+.c-indigo .card-icon-wrapper { background: rgba(99, 102, 241, 0.12); color: #818cf8; }
+.c-purple .card-icon-wrapper { background: rgba(168, 85, 247, 0.12); color: #c084fc; }
+.c-pink .card-icon-wrapper   { background: rgba(236, 72, 153, 0.12); color: #f472b6; }
+.c-orange .card-icon-wrapper { background: rgba(249, 115, 22, 0.12); color: #fb923c; }
+.c-amber .card-icon-wrapper  { background: rgba(245, 158, 11, 0.12); color: #fbbf24; }
+.c-green .card-icon-wrapper  { background: rgba(34, 197, 94, 0.12);  color: #4ade80; }
+.c-emerald .card-icon-wrapper{ background: rgba(16, 185, 129, 0.12); color: #34d399; }
+.c-cyan .card-icon-wrapper   { background: rgba(6, 182, 212, 0.12);  color: #22d3ee; }
+.c-slate .card-icon-wrapper  { background: rgba(100, 116, 139, 0.12); color: #cbd5e1; }
 </style>
 </head>
 
 <body>
 
 <div class="header">
-    <img src="icon.png" class="logo" alt="Logo">
-    <h1>DISPEČING</h1>
+    <div class="header-title-container">
+        <img src="icon.png" class="logo" alt="Logo">
+        <h1>DISPEČING</h1>
+    </div>
     <p>Správa služieb, pracovníkov a evidencie</p>
-    <div id="datetime"></div>
+    <div id="datetime"><i data-lucide="clock"></i> <span>Načítavam...</span></div>
     <div id="stats"></div>
 </div>
 
 <div class="container">
 
-    <input type="text" id="searchBox" placeholder="🔍 Hľadať tabuľku alebo modul..." onkeyup="searchTiles()">
+    <div class="search-wrapper">
+        <i data-lucide="search"></i>
+        <input type="text" id="searchBox" placeholder="Hľadať tabuľku alebo modul..." onkeyup="searchTiles()">
+    </div>
 
-    <h2>⭐ Najpoužívanejšie</h2>
+    <h2><i data-lucide="star"></i> Najpoužívanejšie</h2>
     <div class="grid">
 
         <a href="https://onedrive.live.com/:x:/g/personal/91F41F1C1993D082/IQCCIv_1G85KRK8U5rNf4wDbARTJJm1h0QC8mnLmyuP4Ckk?resid=91F41F1C1993D082!sf5ff2282ce1b444aaf14e6b35fe300db&ithint=file%2Cxlsx&e=1QUcLY&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3gvYy89MWY0MWYxYzE5OTNkMDgyL0lRQ0NJdl8xRzg1S1JLOFU1ck5mNHdEYkFSVEpKbTFoMFFDOG1uTG15dVA0Q2trP2U9MVFVY0xZ" target="_blank" onclick="countClick('Vilko služby')">
-            <div class="card navy tile">
-                <div class="icon">📅</div>
-                Vilko služby 2026
+            <div class="card c-blue tile">
+                <div class="card-icon-wrapper"><i data-lucide="calendar"></i></div>
+                <span>Vilko služby 2026</span>
             </div>
         </a>
 
         <a href="https://1drv.ms/x/c/965DD13CD5F22182/IQDRFZIZ2zqEQqkRDzg8TereAdbt_rIxQP3gxBTrb6XXaMs?e=qo5NE8" target="_blank" onclick="countClick('p. Mizera služby')">
-            <div class="card coral tile">
-                <div class="icon">📅</div>
-                p. Mizera služby 2027
+            <div class="card c-orange tile">
+                <div class="card-icon-wrapper"><i data-lucide="calendar-days"></i></div>
+                <span>p. Mizera služby 2027</span>
             </div>
         </a>
 
         <a href="https://onedrive.live.com/:x:/g/personal/965DD13CD5F22182/IQBQ08fZ6J74RpIAnZo7CkSzAbfoR8gExJH9evfXJDVwKJQ?resid=965DD13CD5F22182!sd9c7d3509ee846f892009d9a3b0a44b3&ithint=file%2Cxlsx&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3gvYy85NjVERDEzQ0Q1RjIyMTgyL0lRQlEwOGZaNko3NFJwSUFuWm83Q2tTekFiZm9SOGdFeEpIOWV2ZlhKRFZ3S0pR" target="_blank" onclick="countClick('Letisko')">
-            <div class="card yellow tile">
-                <div class="icon">✈️</div>
-                Letisko
+            <div class="card c-amber tile">
+                <div class="card-icon-wrapper"><i data-lucide="plane"></i></div>
+                <span>Letisko</span>
             </div>
         </a>
 
         <a href="https://onedrive.live.com/:x:/g/personal/D70040FC5A6A6531/IQDRlB9jywIWQ7d6wzaWvIzFAa9gkTIAntoiiUXDRO9QI64?resid=D70040FC5A6A6531!s631f94d102cb4316b77ac33696bc8cc5&ithint=file%2Cxlsx&e=4Jha5z&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3gvYy9kNzAwNDBmYzVhNmE2NTMxL0lRRFJsQjlqeXdJV1E3ZDZ3emFXdkl6RkFhOWdrVElBbnRvaWlVWERSTzlRSTY0P2U9NEpoYTV6" target="_blank" onclick="countClick('kilometre Toyota')">
-            <div class="card green tile">
-                <div class="icon">📊</div>
-                kilometre Toyota
+            <div class="card c-green tile">
+                <div class="card-icon-wrapper"><i data-lucide="bar-chart-3"></i></div>
+                <span>kilometre Toyota</span>
             </div>
         </a>
 
         <a href="https://onedrive.live.com/:x:/g/personal/965DD13CD5F22182/IQBlo7sY02O3SJdZDVF0cjx7AcwGvPI155rI7Azm1b6Cgso?resid=965DD13CD5F22182!s18bba36563d348b797590d5174723c7b&ithint=file%2Cxlsx&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3gvYy89NjVERDEzQ0Q1RjIyMTgyL0lRQmxvN3NZMDJPM3NKZFpEVkYwY2p4N0Fjd0d2UEkxNTVySTdBem0xYjZDZ3Nv" target="_blank" onclick="countClick('zaraďovanie vozidiel')">
-            <div class="card lime tile">
-                <div class="icon">🚌</div>
-                zaraďovanie vozidiel
+            <div class="card c-emerald tile">
+                <div class="card-icon-wrapper"><i data-lucide="bus"></i></div>
+                <span>zaraďovanie vozidiel</span>
             </div>
         </a>
 
         <a href="pracovný čas _ Dispečeri.xlsx" onclick="countClick('pracovný čas')">
-            <div class="card cyan tile">
-                <div class="icon">🚔</div>
-                Pracovný čas
+            <div class="card c-cyan tile">
+                <div class="card-icon-wrapper"><i data-lucide="clock-4"></i></div>
+                <span>Pracovný čas</span>
             </div>
         </a>
 
     </div>
 
-    <h2>📂 Všetky moduly</h2>
+    <h2><i data-lucide="layout-grid"></i> Všetky moduly</h2>
     <div class="grid">
 
         <a href="https://zeus.dpb.sk/ticket/ticket-assignments" target="_blank" onclick="countClick('ZEUS')">
-            <div class="card navy tile">
-                <div class="icon">🚌</div>
-                ZEUS
+            <div class="card c-indigo tile">
+                <div class="card-icon-wrapper"><i data-lucide="cpu"></i></div>
+                <span>ZEUS</span>
             </div>
         </a>
 
         <a href="NAD_20250901.pdf" onclick="countClick('NAD')">
-            <div class="card coral tile">
-                <div class="icon">❌</div>
-                NAD, linky X
+            <div class="card c-orange tile">
+                <div class="card-icon-wrapper"><i data-lucide="alert-triangle"></i></div>
+                <span>NAD, linky X</span>
             </div>
         </a>
 
         <a href="Zápisník_Nový_2026_Richard.xlsm" onclick="countClick('Zápisník 2026')">
-            <div class="card grey tile">
-                <div class="icon">📝</div>
-                Zápisník 2026
+            <div class="card c-slate tile">
+                <div class="card-icon-wrapper"><i data-lucide="book-open"></i></div>
+                <span>Zápisník 2026</span>
             </div>
         </a>
 
         <a href="Zápisník_Nový_2027.xlsm" onclick="countClick('Zápisník 2027')">
-            <div class="card grey tile">
-                <div class="icon">📝</div>
-                Zápisník 2027
+            <div class="card c-slate tile">
+                <div class="card-icon-wrapper"><i data-lucide="book-open"></i></div>
+                <span>Zápisník 2027</span>
             </div>
         </a>
 
         <a href="Zápisník_Nový_2028.xlsm" onclick="countClick('Zápisník 2028')">
-            <div class="card grey tile">
-                <div class="icon">📝</div>
-                Zápisník 2028
+            <div class="card c-slate tile">
+                <div class="card-icon-wrapper"><i data-lucide="book-open"></i></div>
+                <span>Zápisník 2028</span>
             </div>
         </a>
 
         <a href="NOVÁ Tabuľka ZV.xlsx" onclick="countClick('Tabuľka ZV')">
-            <div class="card indigo tile">
-                <div class="icon">📝</div>
-                Tabuľka ZV
+            <div class="card c-blue tile">
+                <div class="card-icon-wrapper"><i data-lucide="table"></i></div>
+                <span>Tabuľka ZV</span>
             </div>
         </a>
 
         <a href="https://1drv.ms/x/c/965DD13CD5F22182/IQDOlo2cbwvDSYY3p7CMuSmdAauGFrWma9jZY9yGYwhwfUE?e=MPc3my" target="_blank" onclick="countClick('Pracovnici')">
-            <div class="card purple tile">
-                <div class="icon">👥</div>
-                Pracovníci dispečingu
+            <div class="card c-purple tile">
+                <div class="card-icon-wrapper"><i data-lucide="users"></i></div>
+                <span>Pracovníci dispečingu</span>
             </div>
         </a>
 
         <a href="https://1drv.ms/x/c/d70040fc5a6a6531/IQCWdmLx9USmRbfNn2U-KSZkAY_ctFFUuOZKL1DS4yLk004?e=UT8Zti" target="_blank" onclick="countClick('Kalendár služieb')">
-            <div class="card pink tile">
-                <div class="icon">📅</div>
-                Kalendár služieb
+            <div class="card c-pink tile">
+                <div class="card-icon-wrapper"><i data-lucide="calendar-range"></i></div>
+                <span>Kalendár služieb</span>
             </div>
         </a>
 
         <a href="Dovolenkový lístok_v.3.1..xlsx" onclick="countClick('Dovolenkový lístok')">
-            <div class="card teal tile">
-                <div class="icon">📝</div>
-                Dovolenkový lístok
+            <div class="card c-cyan tile">
+                <div class="card-icon-wrapper"><i data-lucide="file-text"></i></div>
+                <span>Dovolenkový lístok</span>
             </div>
         </a>
 
         <a href="preplatenie zdravotné.pdf" onclick="countClick('preplatenie zdravotné')">
-            <div class="card coral tile">
-                <div class="icon">🚑</div>
-                Preplatenie zdravotné
+            <div class="card c-amber tile">
+                <div class="card-icon-wrapper"><i data-lucide="file-heart"></i></div>
+                <span>Preplatenie zdravotné</span>
             </div>
         </a>
 
         <a href="https://1drv.ms/x/c/965DD13CD5F22182/IQBk5jM6wEO9RofUdSxBTtnYAd-U96fo5m_BbcRKOmVpfZE?e=0naURc" target="_blank" onclick="countClick('Telefónny zoznam')">
-            <div class="card yellow tile">
-                <div class="icon">📞</div>
-                Telefónny zoznam
+            <div class="card c-emerald tile">
+                <div class="card-icon-wrapper"><i data-lucide="phone"></i></div>
+                <span>Telefónny zoznam</span>
             </div>
         </a>
 
         <a href="https://chatgpt.com/" target="_blank" onclick="countClick('ChatGPT')">
-            <div class="card teal tile">
-                <div class="icon">🤖</div>
-                ChatGPT
+            <div class="card c-indigo tile">
+                <div class="card-icon-wrapper"><i data-lucide="bot"></i></div>
+                <span>ChatGPT</span>
             </div>
         </a>
 
         <a href="Údaje o vozidlách, Protokol MHD+CUDZÍ , správa o nehode v.04 2026.xls" target="_blank" onclick="countClick('údaje o vozidlách 4/26')">
-            <div class="card indigo tile">
-                <div class="icon">🚉</div>
-                Údaje o vozidlách 4/26
+            <div class="card c-blue tile">
+                <div class="card-icon-wrapper"><i data-lucide="truck"></i></div>
+                <span>Údaje o vozidlách 4/26</span>
             </div>
         </a>
 
         <a href="sprava_o_nehode.pdf" target="_blank" onclick="countClick('správa o nehode')">
-            <div class="card grey tile">
-                <div class="icon">📋</div>
-                Správa o nehode
+            <div class="card c-slate tile">
+                <div class="card-icon-wrapper"><i data-lucide="shield-alert"></i></div>
+                <span>Správa o nehode</span>
             </div>
         </a>
 
         <a href="Rekreačný preukaz.doc" target="_blank" onclick="countClick('Rekreačný poukaz')">
-            <div class="card lime tile">
-                <div class="icon">🌴</div>
-                Rekreačný poukaz
+            <div class="card c-green tile">
+                <div class="card-icon-wrapper"><i data-lucide="palmtree"></i></div>
+                <span>Rekreačný poukaz</span>
             </div>
         </a>
 
         <a href="Čestné prehlásenie - zápisnica.pdf" target="_blank" onclick="countClick('čestné prehlásenie SK')">
-            <div class="card navy tile">
-                <div class="icon">📜</div>
-                Čestné prehlásenie SK
+            <div class="card c-slate tile">
+                <div class="card-icon-wrapper"><i data-lucide="file-check"></i></div>
+                <span>Čestné prehlásenie SK</span>
             </div>
         </a>
 
         <a href="čestné prehlásenie RUJ.pdf" target="_blank" onclick="countClick('čestné prehlásenie RJ')">
-            <div class="card cyan tile">
-                <div class="icon">📜</div>
-                Čestné prehlásenie RJ
+            <div class="card c-slate tile">
+                <div class="card-icon-wrapper"><i data-lucide="file-check-2"></i></div>
+                <span>Čestné prehlásenie RJ</span>
             </div>
         </a>
 
@@ -401,11 +440,13 @@ h2 {
 </div>
 
 <script>
+// Inicializácia vector ikon
+lucide.createIcons();
+
 function updateTime() {
     let now = new Date();
-    document.getElementById("datetime").innerHTML =
-        "📅 " + now.toLocaleDateString("sk-SK") +
-        " | 🕒 " + now.toLocaleTimeString("sk-SK");
+    document.querySelector("#datetime span").innerText =
+        now.toLocaleDateString("sk-SK") + " | " + now.toLocaleTimeString("sk-SK");
 }
 setInterval(updateTime, 1000);
 updateTime();
