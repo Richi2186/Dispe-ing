@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DISPEČING</title>
 
-<!-- PWA Manifest & Ikony pre inštaláciu -->
+<!-- PWA Manifest & Ikony -->
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
@@ -15,9 +15,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Dispečing">
 
-<!-- Lucide Icons -->
+<!-- Lucide Icons & XLSX Library -->
 <script src="https://unpkg.com/lucide@latest"></script>
-<!-- XLSX Library -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
@@ -28,14 +27,16 @@
     --search-bg: #141f36;
     --text-main: #ffffff;
     --text-sub: #8ea0bc;
+    --accent-blue: #38bdf8;
 }
 
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: var(--bg-gradient);
     background-attachment: fixed;
@@ -57,10 +58,10 @@ body {
     height: 65px;
     border-radius: 50%;
     margin-bottom: 8px;
+    object-fit: cover;
 }
 
 .header h1 {
-    margin: 0;
     font-size: 28px;
     font-weight: 900;
     letter-spacing: 2.5px;
@@ -68,7 +69,7 @@ body {
 }
 
 .header p {
-    margin: 4px 0 0;
+    margin-top: 4px;
     color: var(--text-sub);
     font-size: 13px;
 }
@@ -76,26 +77,40 @@ body {
 #datetime {
     margin-top: 10px;
     font-size: 13px;
-    color: #38bdf8;
+    color: var(--accent-blue);
     display: inline-flex;
     align-items: center;
     gap: 6px;
     font-weight: 500;
 }
 
-#stats {
+/* STATS */
+.stats-container {
     text-align: center;
-    margin-top: 8px;
+    margin-top: 10px;
     font-size: 11px;
     color: var(--text-sub);
     padding: 0 20px;
+}
+
+#stats {
     word-break: break-all;
+}
+
+.reset-btn {
+    background: transparent;
+    border: none;
+    color: #ef4444;
+    font-size: 11px;
+    cursor: pointer;
+    margin-left: 8px;
+    text-decoration: underline;
 }
 
 /* CONTAINER */
 .container {
     max-width: 1100px;
-    margin: auto;
+    margin: 0 auto;
     padding: 0 20px 20px;
 }
 
@@ -125,6 +140,7 @@ body {
     color: var(--text-main);
     outline: none;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+    transition: border-color 0.2s ease;
 }
 
 #searchBox::placeholder {
@@ -132,7 +148,7 @@ body {
 }
 
 #searchBox:focus {
-    border-color: #38bdf8;
+    border-color: var(--accent-blue);
 }
 
 /* HEADINGS */
@@ -150,31 +166,30 @@ h2 .h-icon {
     color: #f59e0b;
 }
 
-/* GRID */
+/* GRID & CARDS */
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
     gap: 16px;
 }
 
-a {
+.tile-link {
     text-decoration: none;
+    display: block;
 }
 
-/* CARD DESIGN (PODLA OBRÁZKA 1) */
 .card {
     height: 72px;
     border-radius: 14px;
     background: var(--card-bg);
     border: 1px solid var(--card-border);
-    border-left: 4px solid var(--card-accent, #3b82f6); /* Farebný ľavý okraj */
+    border-left: 4px solid var(--card-accent, #3b82f6);
     color: var(--text-main);
     display: flex;
     align-items: center;
     padding: 0 14px;
     gap: 14px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    cursor: pointer;
 }
 
 .card:hover {
@@ -182,7 +197,6 @@ a {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
 }
 
-/* FAREBNÝ ŠTVOREC PRE IKONU */
 .card-icon-box {
     width: 42px;
     height: 42px;
@@ -207,37 +221,39 @@ a {
     color: #ffffff;
 }
 
-/* FARBY KARIET A IKON */
-.c-blue    { --card-accent: #2563eb; }
-.c-orange  { --card-accent: #f97316; }
-.c-amber   { --card-accent: #d97706; }
-.c-teal    { --card-accent: #0d9488; }
-.c-yellow  { --card-accent: #eab308; }
-.c-cyan    { --card-accent: #06b6d4; }
-.c-slate   { --card-accent: #475569; }
-.c-purple  { --card-accent: #9333ea; }
-.c-red     { --card-accent: #ef4444; }
-.c-green   { --card-accent: #16a34a; }
+/* FAREBNÉ ŠTÝLE */
+.c-blue   { --card-accent: #2563eb; }
+.c-orange { --card-accent: #f97316; }
+.c-amber  { --card-accent: #d97706; }
+.c-teal   { --card-accent: #0d9488; }
+.c-yellow { --card-accent: #eab308; }
+.c-cyan   { --card-accent: #06b6d4; }
+.c-slate  { --card-accent: #475569; }
+.c-purple { --card-accent: #9333ea; }
+.c-red    { --card-accent: #ef4444; }
+.c-green  { --card-accent: #16a34a; }
 </style>
 </head>
 
 <body>
 
-<div class="header">
+<header class="header">
     <img src="icon.png" class="logo" alt="Logo">
     <h1>DISPEČING</h1>
     <p>Správa služieb, pracovníkov a evidencie</p>
     <div id="datetime">
-        <i data-lucide="calendar" style="width:14px;height:14px;"></i>
+        <i data-lucide="calendar"></i>
         <span id="date-part"></span>
-        <i data-lucide="clock" style="width:14px;height:14px;margin-left:6px;"></i>
+        <i data-lucide="clock" style="margin-left: 6px;"></i>
         <span id="time-part"></span>
     </div>
+</header>
+
+<div class="stats-container">
+    <span id="stats"></span>
 </div>
 
-<div id="stats"></div>
-
-<div class="container">
+<main class="container">
 
     <div class="search-wrapper">
         <i data-lucide="search"></i>
@@ -247,36 +263,36 @@ a {
     <h2><span class="h-icon">★</span> Najpoužívanejšie</h2>
     <div class="grid">
 
-        <a href="https://onedrive.live.com/:x:/g/personal/91F41F1C1993D082/IQCCIv_1G85KRK8U5rNf4wDbARTJJm1h0QC8mnLmyuP4Ckk?resid=91F41F1C1993D082!sf5ff2282ce1b444aaf14e6b35fe300db&ithint=file%2Cxlsx&e=1QUcLY&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3gvYy89MWY0MWYxYzE5OTNkMDgyL0lRQ0NJdl8xRzg1S1JLOFU1ck5mNHdEYkFSVEpKbTFoMFFDOG1uTG15dVA0Q2trP2U9MVFVY0xZ" target="_blank" onclick="countClick('Vilko služby')">
-            <div class="card c-blue tile">
+        <a href="https://onedrive.live.com/:x:/g/personal/91F41F1C1993D082/IQCCIv_1G85KRK8U5rNf4wDbARTJJm1h0QC8mnLmyuP4Ckk?resid=91F41F1C1993D082!sf5ff2282ce1b444aaf14e6b35fe300db&ithint=file%2Cxlsx&e=1QUcLY&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3gvYy89MWY0MWYxYzE5OTNkMDgyL0lRQ0NJdl8xRzg1S1JLOFU1ck5mNHdEYkFSVEpKbTFoMFFDOG1uTG15dVA0Q2trP2U9MVFVY0xZ" target="_blank" class="tile-link" data-name="Vilko služby">
+            <div class="card c-blue">
                 <div class="card-icon-box"><i data-lucide="calendar"></i></div>
                 <div class="card-title">Vilko služby 2026</div>
             </div>
         </a>
 
-        <a href="https://1drv.ms/x/c/965DD13CD5F22182/IQDRFZIZ2zqEQqkRDzg8TereAdbt_rIxQP3gxBTrb6XXaMs?e=qo5NE8" target="_blank" onclick="countClick('p. Mizera služby')">
-            <div class="card c-orange tile">
+        <a href="https://1drv.ms/x/c/965DD13CD5F22182/IQDRFZIZ2zqEQqkRDzg8TereAdbt_rIxQP3gxBTrb6XXaMs?e=qo5NE8" target="_blank" class="tile-link" data-name="p. Mizera služby">
+            <div class="card c-orange">
                 <div class="card-icon-box"><i data-lucide="calendar"></i></div>
                 <div class="card-title">p. Mizera služby 2027</div>
             </div>
         </a>
 
-        <a href="https://onedrive.live.com/:x:/g/personal/965DD13CD5F22182/IQBQ08fZ6J74RpIAnZo7CkSzAbfoR8gExJH9evfXJDVwKJQ?resid=965DD13CD5F22182!sd9c7d3509ee846f892009d9a3b0a44b3&ithint=file%2Cxlsx&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3gvYy85NjVERDEzQ0Q1RjIyMTgyL0lRQlEwOGZaNko3NFJwSUFuWm83Q2tTekFiZm9SOGdFeEpIOWV2ZlhKRFZ3S0pR" target="_blank" onclick="countClick('Letisko')">
-            <div class="card c-amber tile">
+        <a href="https://onedrive.live.com/:x:/g/personal/965DD13CD5F22182/IQBQ08fZ6J74RpIAnZo7CkSzAbfoR8gExJH9evfXJDVwKJQ?resid=965DD13CD5F22182!sd9c7d3509ee846f892009d9a3b0a44b3&ithint=file%2Cxlsx&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3gvYy89NjVERDEzQ0Q1RjIyMTgyL0lRQlEwOGZaNko3NFJwSUFuWm83Q2tTekFiZm9SOGdFeExIOWV2ZlhKRFZ3S0pR" target="_blank" class="tile-link" data-name="Letisko">
+            <div class="card c-amber">
                 <div class="card-icon-box"><i data-lucide="plane"></i></div>
                 <div class="card-title">Letisko</div>
             </div>
         </a>
 
-        <a href="https://onedrive.live.com/:x:/g/personal/D70040FC5A6A6531/IQDRlB9jywIWQ7d6wzaWvIzFAa9gkTIAntoiiUXDRO9QI64?resid=D70040FC5A6A6531!s631f94d102cb4316b77ac33696bc8cc5&ithint=file%2Cxlsx&e=4Jha5z&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3gvYy9kNzAwNDBmYzVhNmE2NTMxL0lRRFJsQjlqeXdJV1E3ZDZ3emFXdkl6RkFhOWdrVElBbnRvaWlVWERSTzlRSTY0P2U9NEpoYTV6" target="_blank" onclick="countClick('kilometre Toyota')">
-            <div class="card c-teal tile">
+        <a href="https://onedrive.live.com/:x:/g/personal/D70040FC5A6A6531/IQDRlB9jywIWQ7d6wzaWvIzFAa9gkTIAntoiiUXDRO9QI64?resid=D70040FC5A6A6531!s631f94d102cb4316b77ac33696bc8cc5&ithint=file%2Cxlsx&e=4Jha5z&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3gvYy9kNzAwNDBmYzVhNmE2NTMxL0lRRFJsQjlqeXdJV1E3ZDZ3emFXdkl6RkFhOWdrVElBbnRvaWlVWERSTzlRSTY0P2U9NEpoYTV6" target="_blank" class="tile-link" data-name="kilometre Toyota">
+            <div class="card c-teal">
                 <div class="card-icon-box"><i data-lucide="car"></i></div>
                 <div class="card-title">kilometre Toyota</div>
             </div>
         </a>
 
-        <a href="https://onedrive.live.com/:x:/g/personal/965DD13CD5F22182/IQBlo7sY02O3SJdZDVF0cjx7AcwGvPI155rI7Azm1b6Cgso?resid=965DD13CD5F22182!s18bba36563d348b797590d5174723c7b&ithint=file%2Cxlsx&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3gvYy89NjVERDEzQ0Q1RjIyMTgyL0lRQmxvN3NZMDJPM3NKZFpEVkYwY2p4N0Fjd0d2UEkxNTVySTdBem0xYjZDZ3Nv" target="_blank" onclick="countClick('zaraďovanie vozidiel')">
-            <div class="card c-yellow tile">
+        <a href="https://onedrive.live.com/:x:/g/personal/965DD13CD5F22182/IQBlo7sY02O3SJdZDVF0cjx7AcwGvPI155rI7Azm1b6Cgso?resid=965DD13CD5F22182!s18bba36563d348b797590d5174723c7b&ithint=file%2Cxlsx&migratedtospo=true&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3gvYy89NjVERDEzQ0Q1RjIyMTgyL0lRQmxvN3NZMDJPM3NKZFpEVkYwY2p4N0Fjd0d2UEkxNTVySTdBem0xYjZDZ3Nv" target="_blank" class="tile-link" data-name="zaraďovanie vozidiel">
+            <div class="card c-yellow">
                 <div class="card-icon-box"><i data-lucide="bus"></i></div>
                 <div class="card-title">zaraďovanie vozidiel</div>
             </div>
@@ -287,84 +303,94 @@ a {
     <h2><span style="color:#d97706;">📁</span> Všetky moduly</h2>
     <div class="grid">
 
-        <a href="https://zeus.dpb.sk/ticket/ticket-assignments" target="_blank" onclick="countClick('ZEUS')">
-            <div class="card c-blue tile">
+        <a href="https://zeus.dpb.sk/ticket/ticket-assignments" target="_blank" class="tile-link" data-name="ZEUS">
+            <div class="card c-blue">
                 <div class="card-icon-box"><i data-lucide="bus"></i></div>
                 <div class="card-title">ZEUS</div>
             </div>
         </a>
 
-        <a href="NAD_20250901.pdf" onclick="countClick('NAD')">
-            <div class="card c-cyan tile">
+        <a href="NAD_20250901.pdf" class="tile-link" data-name="NAD">
+            <div class="card c-cyan">
                 <div class="card-icon-box"><i data-lucide="map-pin"></i></div>
                 <div class="card-title">NAD, linky X</div>
             </div>
         </a>
 
-        <a href="Zápisník_Nový_2026_Richard.xlsm" onclick="countClick('Zápisník 2026')">
-            <div class="card c-slate tile">
+        <a href="Zápisník_Nový_2026_Richard.xlsm" class="tile-link" data-name="Zápisník 2026">
+            <div class="card c-slate">
                 <div class="card-icon-box"><i data-lucide="book-open"></i></div>
                 <div class="card-title">Zápisník 2026</div>
             </div>
         </a>
 
-       <a href="Zápisník_Nový_2027.xlsm" onclick="countClick('Zápisník 2027')">
-            <div class="card c-slate tile">
+        <a href="Zápisník_Nový_2027.xlsm" class="tile-link" data-name="Zápisník 2027">
+            <div class="card c-slate">
                 <div class="card-icon-box"><i data-lucide="book-open"></i></div>
                 <div class="card-title">Zápisník 2027</div>
             </div>
         </a>
 
-        <a href="Zápisník_Nový_2028.xlsm" onclick="countClick('Zápisník 2028')">
-            <div class="card c-slate tile">
+        <a href="Zápisník_Nový_2028.xlsm" class="tile-link" data-name="Zápisník 2028">
+            <div class="card c-slate">
                 <div class="card-icon-box"><i data-lucide="book-open"></i></div>
                 <div class="card-title">Zápisník 2028</div>
             </div>
         </a>
 
-        <a href="NOVÁ Tabuľka ZV.xlsx" onclick="countClick('Tabuľka ZV')">
-            <div class="card c-blue tile">
+        <a href="NOVÁ Tabuľka ZV.xlsx" class="tile-link" data-name="Tabuľka ZV">
+            <div class="card c-blue">
                 <div class="card-icon-box"><i data-lucide="grid"></i></div>
                 <div class="card-title">Tabuľka ZV</div>
             </div>
         </a>
 
-        <a href="https://1drv.ms/x/c/965DD13CD5F22182/IQDOlo2cbwvDSYY3p7CMuSmdAauGFrWma9jZY9yGYwhwfUE?e=MPc3my" target="_blank" onclick="countClick('Pracovnici')">
-            <div class="card c-purple tile">
+        <a href="https://1drv.ms/x/c/965DD13CD5F22182/IQDOlo2cbwvDSYY3p7CMuSmdAauGFrWma9jZY9yGYwhwfUE?e=MPc3my" target="_blank" class="tile-link" data-name="Pracovnici">
+            <div class="card c-purple">
                 <div class="card-icon-box"><i data-lucide="users"></i></div>
                 <div class="card-title">Pracovníci dispečingu</div>
             </div>
         </a>
 
-        <a href="https://1drv.ms/x/c/d70040fc5a6a6531/IQCWdmLx9USmRbfNn2U-KSZkAY_ctFFUuOZKL1DS4yLk004?e=UT8Zti" target="_blank" onclick="countClick('Kalendár služieb')">
-            <div class="card c-red tile">
+        <a href="https://1drv.ms/x/c/d70040fc5a6a6531/IQCWdmLx9USmRbfNn2U-KSZkAY_ctFFUuOZKL1DS4yLk004?e=UT8Zti" target="_blank" class="tile-link" data-name="Kalendár služieb">
+            <div class="card c-red">
                 <div class="card-icon-box"><i data-lucide="calendar"></i></div>
                 <div class="card-title">Kalendár služieb</div>
             </div>
         </a>
 
-        <a href="Dovolenkový lístok_v.3.1..xlsx" onclick="countClick('Dovolenkový lístok')">
-            <div class="card c-teal tile">
+        <a href="Dovolenkový lístok_v.3.1..xlsx" class="tile-link" data-name="Dovolenkový lístok">
+            <div class="card c-teal">
                 <div class="card-icon-box"><i data-lucide="umbrella"></i></div>
                 <div class="card-title">Dovolenkový lístok</div>
             </div>
         </a>
 
     </div>
-</div>
+</main>
 
 <script>
+// Inicializácia ikon
 lucide.createIcons();
 
+// Čas a dátum
 function updateTime() {
-    let now = new Date();
+    const now = new Date();
     document.getElementById("date-part").innerText = now.toLocaleDateString("sk-SK");
     document.getElementById("time-part").innerText = now.toLocaleTimeString("sk-SK");
 }
 setInterval(updateTime, 1000);
 updateTime();
 
-/* STATS */
+// Sledovanie kliknutí
+document.addEventListener("click", (e) => {
+    const link = e.target.closest(".tile-link");
+    if (link) {
+        const name = link.getAttribute("data-name");
+        if (name) countClick(name);
+    }
+});
+
 function countClick(name) {
     let data = JSON.parse(localStorage.getItem("stats")) || {};
     data[name] = (data[name] || 0) + 1;
@@ -377,33 +403,43 @@ function showStats() {
     let items = [];
 
     for (let key in data) {
-        items.push(key + ": " + data[key]);
+        items.push(`${key}: ${data[key]}`);
     }
 
+    const statsEl = document.getElementById("stats");
     if (items.length > 0) {
-        document.getElementById("stats").innerHTML = "📊 Kliknutia: " + items.join(" | ");
+        statsEl.innerHTML = "📊 Kliknutia: " + items.join(" | ") + 
+            ' <button class="reset-btn" onclick="resetStats()">vynulovať</button>';
+    } else {
+        statsEl.innerHTML = "";
     }
+}
+
+function resetStats() {
+    localStorage.removeItem("stats");
+    showStats();
 }
 
 showStats();
 
-/* SEARCH TILES */
+// Vyhľadávanie
 function searchTiles() {
-    let filter = document.getElementById("searchBox").value.toLowerCase();
-    let tiles = document.querySelectorAll(".tile");
+    const filter = document.getElementById("searchBox").value.toLowerCase().trim();
+    const links = document.querySelectorAll(".tile-link");
 
-    tiles.forEach(tile => {
-        tile.style.display = tile.innerText.toLowerCase().includes(filter) ? "" : "none";
+    links.forEach(link => {
+        const text = link.innerText.toLowerCase();
+        link.style.display = text.includes(filter) ? "" : "none";
     });
 }
 
-/* SERVICE WORKER FOR PWA */
+// Service Worker pre PWA
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('service-worker.js', { scope: './' })
-      .then(reg => console.log('Service Worker OK', reg))
-      .catch(err => console.error('Chyba SW', err));
-  });
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js', { scope: './' })
+            .then(reg => console.log('Service Worker OK:', reg.scope))
+            .catch(err => console.error('Chyba SW:', err));
+    });
 }
 </script>
 
